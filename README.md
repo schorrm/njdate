@@ -10,6 +10,6 @@ Usage
 -----
 Date parser from hebrew text:
 ```
-import njdate.ej_generic as ej
-jewish_date = ej.ExtractDate(text_query)
+from njdate.ej_generic import ExtractDate
+jewish_date = ExtractDate(text_query)
 ```
