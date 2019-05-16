@@ -33,6 +33,9 @@ def date_aggressor_lamedify (search_text, begin_year, end_year):
 
 # For dropped Tafs etc, so we need to add 400 years after what we've found, etc
 def yshift_date_aggressor (search_text, begin_year, end_year, shift=400):
+    # change: move search year and begin year to before shifting 400 years, so the call is the same.
+    begin_year -= shift
+    end_year   -= shift
     tokens = search_text.translate(str.maketrans("","",specpunc)).split()
     for search_year in range (begin_year, end_year+1):
         if gematria.YearNoToGematria(search_year) in tokens:
