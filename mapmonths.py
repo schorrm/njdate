@@ -39,6 +39,8 @@ mdict = {
 'א"ש': ADAR_II,
 'בעומר': OMER,
 'לעומר': OMER,
+'למטמונים': OMER,
+'למ"ט מונים': OMER,
 'חנוכה': CHANUKAH,
 'דחנוכה': CHANUKAH,
 'העשירי': TZOM_TEN,

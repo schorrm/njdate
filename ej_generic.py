@@ -200,6 +200,10 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 		year_v = year_v % earliest + earliest
 		return njdate.JewishDate(year_v,1,1)
 
+	# For protection from aggressor overuse, w/ SA junk making it in:
+	if words[-2] in ["סי'", 'סימן']:
+		return None
+	
 	# New addition: sanity check on extract, using range.
 	# If we have a result that is too low, and also,
 	# the prior word isn't a month / other date word AND after adding the prior word
