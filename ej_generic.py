@@ -186,19 +186,35 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 	if (len(words) < 1):
 		return None
 		
-	# last is year.
-	year_s = words[-1]
-	
-	year_v = gg(year_s)
-	
-	year_v = year_v % earliest + earliest
 	
 	if (len(words) >= 2):
 		if shnat in words[-2]:
 			words.pop(-2)
 		
+	# last is year.
+	year_s = words[-1]
+	year_v = gg(year_s)
+	
 	if (len(words) < 2):
+		
+		year_v = year_v % earliest + earliest
 		return njdate.JewishDate(year_v,1,1)
+
+	# New addition: sanity check on extract, using range.
+	# If we have a result that is too low, and also,
+	# the prior word isn't a month / other date word AND after adding the prior word
+	# we now have a suitable gematria, we think it is a bigram year.
+
+	if (year_v + 5000 < earliest and 
+		gg(words[-2]) + year_v + 5000 in range(earliest, latest+1) and
+		GetMonthLoose(words[-2] == -1)
+		):
+		year_v += gg(words[-2])
+
+	year_v += 5000
+
+	if year_v not in range( earliest, latest + 1 ):
+		return None
 	
 	if (words[-2] == rishon or words[-2] == sheni or words[-2] == harishon or words[-2] == hasheni):
 		if (words[-3] == adar):
