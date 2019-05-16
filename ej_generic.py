@@ -205,10 +205,10 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 	# the prior word isn't a month / other date word AND after adding the prior word
 	# we now have a suitable gematria, we think it is a bigram year.
 
-	if (year_v + 5000 < earliest and 
-		gg(words[-2]) + year_v + 5000 in range(earliest, latest+1) and
+	if ((year_v + 5000 < earliest) and 
+		(gg(words[-2]) + year_v + 5000 in range(earliest, latest+1)) and
 		(GetMonthLoose(words[-2]) == -1) and
-		words[-2] not in mapparshiot.getParshaStrings()
+		(words[-2] not in mapparshiot.getParshaStrings())
 		):
 		year_v += gg(words[-2])
 
