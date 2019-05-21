@@ -70,7 +70,7 @@ def _ParshaExtractor (heb_date_string, assignment_year):
 		# looking at you, Parshat Bo.
 		if parsha in heb_date_string.split():
 			parsha_code = mapparshiot.getParshaNum(parsha)
-			base_date = njparshiot.getdate_of_parsha(assignment_year, parsha_code)
+			base_date = njparshiot.calc_parsha(assignment_year, parsha_code)
 			
 			split_index = heb_date_string.find(parsha) - 1
 			nhds = heb_date_string[:split_index]

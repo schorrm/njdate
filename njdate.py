@@ -15,12 +15,6 @@ copies. THERE IS NO WARRANTY - USE AT YOUR OWN RISK.
 Copyright 2018, Moshe Schorr, all rights reserved. MIT License.
 Added more functionality & parshas.
 """
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import datetime
 
 HALAKIM_PER_HOUR = 1080
@@ -158,7 +152,7 @@ class JewishDate(object):
 
     # add number of days
     def addDays(self, num_days):
-        return self.from_date(self.to_date() + datetime.timedelta(num_days))
+        return self.from_sdn(self.to_sdn() + num_days)
 
     # Weekday method
     def weekday(self):
@@ -170,7 +164,8 @@ class JewishDate(object):
           An integer representing the day of the week with Sunday as 1
           through Saturday as 7.
         """
-        return self.to_date().isoweekday() % 7 + 1
+        return (self.to_sdn() + 1 ) % 7 + 1
+        # return self.to_date().isoweekday() % 7 + 1
         
     # Shabbos method
     def getShabbos (self):
@@ -182,8 +177,7 @@ class JewishDate(object):
           An integer representing the day of the week with Sunday as 1
           through Saturday as 7.
         """
-        shift = 7 - self.weekday()
-        return self.addDays(shift)
+        return self.addDays(7 - self.weekday())
 
     # End Modified section
 
