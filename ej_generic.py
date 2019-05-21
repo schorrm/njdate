@@ -103,7 +103,7 @@ def ForceYear (heb_date_string, year_v):
 	
 	if (words[-2] == rishon or words[-2] == sheni or words[-2] == harishon or words[-2] == hasheni):
 		if (words[-3] == adar):
-			words[-2] = words[-3] + " " + words[-2]
+			words[-2] = f"{words[-3]} {words[-2]}"
 			words.pop(-3)
 			
 	month = GetMonthLoose(words[-2])
@@ -179,13 +179,13 @@ def ForceYear (heb_date_string, year_v):
 	return njdate.JewishDate(year_v,1,1)
 
 
+# TODO: make much faster, this is an issue
 def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 	if ("מנחם אב") in heb_date_string:
 		heb_date_string = heb_date_string.replace('מנחם אב', 'אב')
 	words = heb_date_string.split()
 	if (len(words) < 1):
 		return None
-		
 	
 	if (len(words) >= 2):
 		if shnat in words[-2]:
@@ -201,7 +201,7 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 		return njdate.JewishDate(year_v,1,1)
 
 	# For protection from aggressor overuse, w/ SA junk making it in:
-	if words[-2] in ["סי'", 'סימן']:
+	if words[-2] in ["סי'", 'סימן', "בסי'", "בסימן"]:
 		return None
 	
 	# New addition: sanity check on extract, using range.
@@ -221,9 +221,9 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 	if year_v not in range( earliest, latest + 1 ):
 		return None
 	
-	if (words[-2] == rishon or words[-2] == sheni or words[-2] == harishon or words[-2] == hasheni):
+	if (len(words) > 3) and (words[-2] == rishon or words[-2] == sheni or words[-2] == harishon or words[-2] == hasheni):
 		if (words[-3] == adar):
-			words[-2] = words[-3] + " " + words[-2]
+			words[-2] = f"{words[-3]} {words[-2]}"
 			words.pop(-3)
 			
 	month = GetMonthLoose(words[-2])
