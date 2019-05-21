@@ -1,19 +1,34 @@
 alphabet = 'אבגדהוזחטיכלמנסעפצקרשת'
 values = [1,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100,200,300,400]
-rvals = [1,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100,200,300,400]
+# rvals = [1,2,3,4,5,6,7,8,9,10,20,30,40,50,60,70,80,90,100,200,300,400]
+rvals = values.copy()
 rvals.reverse()
 
 sofits = 'ךםןףץ'
 replace_sofits = 'כמנפצ'
 
+salphabet = alphabet
+for r, s in zip(replace_sofits, sofits):
+	salphabet = salphabet.replace(r,s)
+
 yudheh = 'יה'
 yudvav = 'יו'
 
+taf = 'ת'
+tet = 'ט'
+vav = 'ו'
+zayin = 'ז'
+
 tetvav = 'טו'
+tvq    = 'ט"ו'
 tetzayin = 'טז'
+tzq      = 'ט"ז'
 
 mapper = dict(zip(alphabet, values))
 numtogem_map = dict(zip(values, alphabet))
+numtogem_map[0] = '' # allows some computational shortcuts
+snumtogem_map = dict(zip(values, salphabet))
+snumtogem_map[0] = '' # allows some computational shortcuts
 
 def Gematria (req_string):
 	for sf, rg in zip (sofits, replace_sofits):
@@ -28,32 +43,42 @@ def Gematria (req_string):
 	return sum
 
 # Change: May 30th, 2018: add number to gematria (formatted)
-
-def _NumGemRecursive (number):
-	for val in rvals:
-		if val <= number:
-			return numtogem_map[val] + _NumGemRecursive(number-val)
-	return ''
+# Change: May 21st, 2019: this is too damn slow
+# def _NumGemRecursive (number):
+# 	for val in rvals:
+# 		if val <= number:
+# 			return numtogem_map[val] + _NumGemRecursive(number-val)
+# 	return ''
 
 # Format is whether to insert " or ' in string
 # if disabled, will return letters only
 def NumberToGematria (number, sofit=True, format_quotes=True):
-	base_string = _NumGemRecursive(number)
+	singles  = number % 10
+	hundreds = number // 100 % 4
+	tens     = number // 10 % 10
+	ntafs    = number // 400
+	char_ct = ntafs + (singles is not 0) + (tens is not 0) + (hundreds is not 0)
+	tens *= 10
+	hundreds *= 100
+	usofit = snumtogem_map if sofit else numtogem_map
+	if format_quotes:
+		if char_ct >= 2:
+			if number % 100 in (15, 16):
+				return f'{ntafs * taf}{numtogem_map[hundreds]}{tet}"{numtogem_map[singles+1]}'
+			elif singles:
+				return f'{ntafs * taf}{numtogem_map[hundreds]}{numtogem_map[tens]}"{numtogem_map[singles]}'
+			elif tens:
+				return f'{ntafs * taf}{numtogem_map[hundreds]}"{usofit[tens]}'
+			elif hundreds:
+				return f'{ntafs * taf}"{numtogem_map[hundreds]}'
+			return f'{(ntafs-1)*taf}"{taf}'
+		return f'{ntafs * taf}{numtogem_map[hundreds]}{numtogem_map[tens]}{numtogem_map[singles]}'
+	elif number % 100 in (15, 16):
+		return f'{ntafs * taf}{numtogem_map[hundreds]}{tet}{numtogem_map[singles+1]}'
+	elif singles or not tens:
+		return f'{ntafs * taf}{numtogem_map[hundreds]}{numtogem_map[tens]}{numtogem_map[singles]}'
+	return f'{ntafs * taf}{numtogem_map[hundreds]}{usofit[tens]}'
 
-	base_string = base_string.replace(yudheh, tetvav)
-	base_string = base_string.replace(yudvav, tetzayin)
-
-	if not format_quotes:
-		return base_string
-
-	if len(base_string) > 1:
-		lchar = base_string[-1]
-		if lchar in replace_sofits and sofit:
-			sdict = dict(zip(replace_sofits, sofits))
-			lchar = sdict[lchar]
-
-		return base_string[:-1] + '"' + lchar
-	return base_string + "'"
 
 def YearNoToGematria (number, sofit=True, format_quotes=True):
 	return NumberToGematria(number % 1000, sofit, format_quotes)
