@@ -131,9 +131,9 @@ _lmap = [[(1, 27), (2, 4), (2, 11), (2, 18), (2, 25), (3, 3), (3, 10), (3, 17), 
 
 def calc_parsha(year, parsha, israel=False):
     # Step one: ascertain year type
-    metonicCycle, metonicYear, molad, tishrei1 = njdate._find_start_of_year(year)
+    metonicCycle, metonicYear, molad, tishrei1 = njdate.njdate._find_start_of_year(year)
     molad.add_lunar_cycles(njdate.months_in_metonic_year(metonicYear))
-    nextTishrei1= njdate._get_first_day_of_year((metonicYear + 1) % 19, molad)
+    nextTishrei1= njdate.njdate._get_first_day_of_year((metonicYear + 1) % 19, molad)
     yearLength = nextTishrei1 - tishrei1
     leapyear   = njdate.is_leap_year(year)
     ytype = _year_types[((tishrei1%7)+1, yearLength, leapyear)]
