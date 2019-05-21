@@ -71,7 +71,8 @@ def _ParshaExtractor (heb_date_string, assignment_year):
 		if parsha in heb_date_string.split():
 			parsha_code = mapparshiot.getParshaNum(parsha)
 			base_date = njparshiot.calc_parsha(assignment_year, parsha_code)
-			
+			if not base_date:
+				return njdate.JewishDate(assignment_year, 1, 1)
 			split_index = heb_date_string.find(parsha) - 1
 			nhds = heb_date_string[:split_index]
 			for filler in PARSHA_FILLERS:
@@ -83,7 +84,7 @@ def _ParshaExtractor (heb_date_string, assignment_year):
 			weekday_string = nhds.split()[-1]
 			wd_num = mapparshiot.getWeekdayFromString(weekday_string)
 			if wd_num:
-				return addDays(base_date, wd_num-7)
+				return base_date.addDays(wd_num-7)
 			return base_date
 			
 	return njdate.JewishDate(assignment_year, 1, 1)
@@ -133,7 +134,7 @@ def ForceYear (heb_date_string, year_v):
 		if (words[-3] == rch):
 			return njdate.JewishDate(year_v, month, 1)
 		if (words[-3] == erach):
-			return addDays(njdate.JewishDate(year_v, month, 1), -1)
+			return njdate.JewishDate(year_v, month, 1).addDays(-1)
 		day = gg (words[-3])
 		if day > 30:
 			day = 15
@@ -154,19 +155,19 @@ def ForceYear (heb_date_string, year_v):
 		day = gg(words[-3]) % 7
 		if (day == 0):
 			day = 1
-		return addDays(njdate.JewishDate(year_v, 8, 14), day)
+		return njdate.JewishDate(year_v, 8, 14).addDays(day)
 			
 	if (month == SUKKOT):
 		day = gg(words[-3]) % 10
 		if (day == 0):
 			day = 1
-		return addDays(njdate.JewishDate(year_v, 1, 14), day)
+		return njdate.JewishDate(year_v, 1, 14).addDays(day)
 			
 	if (month == CHANUKAH):
 		day = gg(words[-3]) % 9
 		if (day == 0):
 			day = 1		
-		return addDays(njdate.JewishDate(year_v, KISLEV, 24), day)
+		return njdate.JewishDate(year_v, KISLEV, 24).addDays(day)
 		
 	if (month == PURIM):
 		if (words[-3] == shushan):
@@ -253,7 +254,7 @@ def ExtractDate (heb_date_string, earliest=5000, latest=5800):
 		if (words[-3] == rch):
 			return njdate.JewishDate(year_v, month, 1)
 		if (words[-3] == erach):
-			return addDays(njdate.JewishDate(year_v, month, 1), -1)
+			return njdate.JewishDate(year_v, month, 1).addDays(-1)
 		day = gg (words[-3])
 		if day > 30:
 			day = 15
