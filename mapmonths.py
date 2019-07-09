@@ -32,6 +32,8 @@ NOT_A_MONTH = -1
 mdict = {
 'אב': AV,
 'אדר': ADAR_II,
+'אד"א': ADAR_I,
+'אד"ב': ADAR_II,
 'אייר': IYAR,
 'איר': IYAR,
 'אלול': ELUL,
