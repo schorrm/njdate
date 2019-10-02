@@ -43,13 +43,6 @@ def Gematria (req_string):
 	return sum
 
 # Change: May 30th, 2018: add number to gematria (formatted)
-# Change: May 21st, 2019: this is too damn slow
-# def _NumGemRecursive (number):
-# 	for val in rvals:
-# 		if val <= number:
-# 			return numtogem_map[val] + _NumGemRecursive(number-val)
-# 	return ''
-
 # Format is whether to insert " or ' in string
 # if disabled, will return letters only
 def NumberToGematria (number, sofit=True, format_quotes=True):
@@ -79,6 +72,15 @@ def NumberToGematria (number, sofit=True, format_quotes=True):
 		return f'{ntafs * taf}{numtogem_map[hundreds]}{numtogem_map[tens]}{numtogem_map[singles]}'
 	return f'{ntafs * taf}{numtogem_map[hundreds]}{usofit[tens]}'
 
+# Old recursive method -- simpler to read, much slower
+# def _NumGemRecursive (number):
+# 	for val in rvals:
+# 		if val <= number:
+# 			return numtogem_map[val] + _NumGemRecursive(number-val)
+# 	return '
+
 
 def YearNoToGematria (number, sofit=True, format_quotes=True):
 	return NumberToGematria(number % 1000, sofit, format_quotes)
+
+	
