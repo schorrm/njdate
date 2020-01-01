@@ -4,10 +4,10 @@ import njdate.ej_generic as ej_generic
 import string
 
 specpunc = string.punctuation.replace('"','').replace("'","")
-
+tr_table = str.maketrans("","",specpunc)
 
 def date_aggressor (search_text, begin_year, end_year):
-    tokens = search_text.translate(str.maketrans("","",specpunc)).split()
+    tokens = search_text.translate(tr_table).split()
     for search_year in range (begin_year, end_year+1):
         if gematria.YearNoToGematria(search_year) in tokens:
             query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year))[:2])
@@ -15,10 +15,13 @@ def date_aggressor (search_text, begin_year, end_year):
         if gematria.YearNoToGematria(search_year, False) in tokens:
             query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year, False))[:2])
             return ej_generic.ExtractDate(query)
+        if gematria.YearNoToGematria(search_year, prepend_heh=True) in tokens:
+            query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year, False))[:2])
+            return ej_generic.ExtractDate(query)
     return None
 
 def date_aggressor_lamedify (search_text, begin_year, end_year):
-    tokens = search_text.translate(str.maketrans("","",specpunc)).split()
+    tokens = search_text.translate(tr_table).split()
     for search_year in range (begin_year, end_year+1):
         if gematria.YearNoToGematria(search_year) in tokens:
             query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year))[:2])
@@ -36,7 +39,7 @@ def yshift_date_aggressor (search_text, begin_year, end_year, shift=400):
     # change: move search year and begin year to before shifting 400 years, so the call is the same.
     begin_year -= shift
     end_year   -= shift
-    tokens = search_text.translate(str.maketrans("","",specpunc)).split()
+    tokens = search_text.translate(tr_table).split()
     for search_year in range (begin_year, end_year+1):
         if gematria.YearNoToGematria(search_year) in tokens:
             query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year))[:2])
@@ -47,7 +50,7 @@ def yshift_date_aggressor (search_text, begin_year, end_year, shift=400):
     return None
 
 def yshift_date_aggressor_lamedify (search_text, begin_year, end_year, shift=400):
-    tokens = search_text.translate(str.maketrans("","",specpunc)).split()
+    tokens = search_text.translate(tr_table).split()
     for search_year in range (begin_year, end_year+1):
         if gematria.YearNoToGematria(search_year, False, False) + '"ל' in tokens:
             query = ' '.join(search_text.partition(gematria.YearNoToGematria(search_year, False, False))[:2])
